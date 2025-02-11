@@ -1,0 +1,79 @@
+<div class="mat-dialog-content">
+    <div mat-dialog-content>
+        <div class="dialog-header">
+            <h1 mat-dialog-title>{{wordSourceControl.value === 'word' ? 'Add Word' : 'Add Text'}} 
+            </h1>
+            <button class="close-btn" title="close" (click)="closeAddDialog()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <div class="dialog-content-container">
+            <mat-form-field>
+                <mat-select [formControl]="wordSourceControl">
+                    @for(source of wordSource; track source){
+                    <mat-option [value]="source.value"> {{source.title}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                @if (wordSourceControl.value === 'text') {
+                <textarea matInput [formControl]="newTextControl" placeholder="Add text" class="text-input"></textarea>
+                } @else {
+                <input matInput [formControl]="newWordControl" placeholder="Add new word" />
+                }
+            </mat-form-field>
+        </div>
+
+        @if(wordSourceControl.value === 'text' && (duplicateTextError$ | async) ){
+        <div class="mat-error-container">
+            <mat-error>Some words already exist in the cloud.</mat-error>
+        </div>
+        }
+        @if(wordSourceControl.value === 'word' && (duplicateWordError$ | async)){
+        <div class="mat-error-container">
+            <mat-error>This word already exists.</mat-error>
+        </div>
+        }
+        @if(wordSourceControl.value === 'word' && newWordControl.hasError('required')) {
+        <div class="mat-error-container">
+            <mat-error>
+                This field is required.
+            </mat-error>
+        </div>
+
+        }
+        @if(wordSourceControl.value === 'text' && newTextControl.hasError('required')) {
+        <div class="mat-error-container">
+            <mat-error>
+                This field is required.
+            </mat-error>
+        </div>
+
+        }
+        @if (wordSourceControl.value === 'word' && newWordControl.hasError('minlength')) {
+        <div class="mat-error-container">
+            <mat-error>
+                Must be at least 2 characters long.
+            </mat-error>
+        </div>
+
+        }
+        @if (wordSourceControl.value === 'text' && (newTextControl.hasError('minlength'))) {
+        <div class="mat-error-container">
+            <mat-error>
+                Must be at least 5 characters long.
+            </mat-error>
+        </div>
+
+        }
+    </div>
+
+    <div class="btn-container">
+        <button class="btn-success" (click)="wordSourceControl.value === 'word' ? addWord() : addText()"
+            [title]="wordSourceControl.value === 'word' ? 'Add Word' : 'Add Text'"
+            [disabled]="wordSourceControl.value === 'word' ? newWordControl.invalid : newTextControl.invalid">
+            <mat-icon>send</mat-icon>
+        </button>
+    </div>
+
+</div>

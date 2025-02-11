@@ -1,0 +1,7 @@
+<nav>
+  <ul>
+    @for(route of routes; track route){
+    <li><a (click)="route.command()">{{route.name}}</a></li>
+    }
+  </ul>
+</nav>

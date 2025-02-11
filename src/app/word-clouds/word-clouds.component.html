@@ -1,0 +1,11 @@
+<div class="add-button-container">
+  <button title="Add Word Cloud" class="add-button" (click)="openAddWordCloudDialog()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+<div class="word-cloud-container">
+  @for ( wordCloud of (wordClouds$ | async); track wordCloud) {
+  <app-word-cloud-card [wordCloud]="wordCloud">
+  </app-word-cloud-card>
+  }
+</div>

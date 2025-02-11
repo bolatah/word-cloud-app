@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  box-sizing: border-box;
+  background-color: rgb(211, 211, 223);
+}
+
+.word-cloud-details {
+  display: flex;
+  flex-direction: column;
+  width: -webkit-fill-available;
+  height: -webkit-fill-available;
+  box-sizing: border-box;
+}
+
+.word-cloud-container {
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.header h1 {
+  margin: 0;
+  flex-grow: 1;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+
+
+ 

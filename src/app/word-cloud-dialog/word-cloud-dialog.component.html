@@ -1,0 +1,42 @@
+<div class="flex items-center justify-between p-4 border-b border-gray-200">
+    <h2 class="text-lg font-medium">Add a New Word Cloud</h2>
+    <button mat-icon-button mat-dialog-close>
+        <mat-icon class="text-gray-600 hover:text-gray-800">close</mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <form [formGroup]="wordCloudForm" (ngSubmit)="onSubmit()" class="form-container">
+        <mat-form-field appearance="fill">
+            <mat-label>Word Cloud Name</mat-label>
+            <input matInput formControlName="name" required />
+            @if(wordCloudForm.get('name')?.hasError('required')){
+            <mat-error>
+                Word cloud name is required.
+            </mat-error>
+            }
+            @if((wordCloudForm.get('name')?.hasError('duplicate')) ){
+            <mat-error>
+               A Word Cloud already exists with this name.                     
+            </mat-error>
+        }
+
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Word Cloud Category</mat-label>
+            <input matInput formControlName="category" required />
+            @if(wordCloudForm.get('category')?.hasError('required')){
+            <mat-error>
+                Word cloud category is required.
+            </mat-error>
+            }
+            @if(wordCloudForm.get('category')?.hasError('duplicate') ){
+                <mat-error>
+                   A Word Cloud already exists with this name.                     
+                </mat-error>
+            }
+
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="wordCloudForm.invalid">Submit</button>
+    </form>
+</mat-dialog-content>

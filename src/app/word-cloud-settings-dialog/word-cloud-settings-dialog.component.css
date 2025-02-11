@@ -1,0 +1,9 @@
+.actions-container{
+    justify-content: flex-end;
+    display: flex;            /* Ensures flexbox layout */
+    gap: 8px;      
+}
+form{
+    display: flex;
+    flex-direction: column;
+}

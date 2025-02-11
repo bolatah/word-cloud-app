@@ -1,0 +1,64 @@
+<mat-dialog-content>
+  <div class="dialog-header">
+    <h1 mat-dialog-title>Customize Word Cloud
+    </h1>
+    <button class="close-btn" title="close" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <form>
+    <mat-slider>
+      <input matSliderThumb [(ngModel)]="fontSize" name="fontSize" min="10" max="100" step="1" aria-label="Font Size" />
+    </mat-slider>
+    <label for="fontSize">Font Size: {{ fontSize }}</label>
+
+    <mat-form-field>
+      <mat-label>Font Type</mat-label>
+      <mat-select [(ngModel)]="fontType" name="fontType">
+        <mat-option value="Arial">Arial</mat-option>
+        <mat-option value="Helvetica">Helvetica</mat-option>
+        <mat-option value="Times New Roman">Times New Roman</mat-option>
+        <mat-option value="Verdana">Verdana</mat-option>
+        <mat-option value="Georgia">Georgia</mat-option>
+        <mat-option value="Courier New">Courier New</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Color Scheme</mat-label>
+      <mat-select [(ngModel)]="colorScheme" name="colorScheme">
+        <mat-option value="single-color">Single Color</mat-option>
+        <mat-option value="random">Random Colors</mat-option>
+        <mat-option value="gradient">Gradient</mat-option>
+        <mat-option value="monochrome">Monochrome</mat-option>
+        <mat-option value="pastel">Pastel</mat-option>
+        <mat-option value="vibrant">Vibrant</mat-option>
+        <mat-option value="dark">Dark Theme</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    @if(colorScheme=== 'single-color'){
+    <mat-form-field>
+      <mat-label>Select Color</mat-label>
+      <input matInput [(ngModel)]="singleColor" [ngxMatColorPicker]="picker" name="singleColor" type="color" />
+     <!--  <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>-->     
+      <ngx-mat-color-picker #picker></ngx-mat-color-picker>
+    </mat-form-field>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions class="actions-container">
+
+  <button mat-button class="btn-success" color="primary" (click)="onSave()">
+    <mat-icon>
+      save
+    </mat-icon></button>
+
+  <button mat-button class="btn-close" (click)="onClose()">
+    <mat-icon>
+      arrow_back
+    </mat-icon>
+  </button>
+</mat-dialog-actions>

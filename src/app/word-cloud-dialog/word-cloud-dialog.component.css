@@ -1,0 +1,9 @@
+.dialog-titel{
+    display: flex;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

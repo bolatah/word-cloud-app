@@ -1,0 +1,29 @@
+<div class="word-cloud-details">
+  @if(wordCloud$ | async){
+  <div class="header">
+    <h1>{{ (wordCloud$ | async)?.name }}</h1>
+
+  </div>
+  }
+  <div class="content">
+    <div #wordCloudContainer class="word-cloud-container"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-add" (click)="openAddDialog()" title="Add Word">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button class="btn-success" (click)="setAsWallpaper(wordCloudContainer)" title="Set Wallpaper">
+      <mat-icon>wallpaper</mat-icon>
+    </button>
+    <button class="btn-settings" (click)="openSettingsDialog()" title="Settings">
+      <mat-icon>settings</mat-icon>
+    </button>
+    <button class="btn-failure" (click)="deleteWordCloud()" title="Delete Word Cloud">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <button class="btn-close" (click)="closeDetails()" title="Back">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+  </div>
+</div>

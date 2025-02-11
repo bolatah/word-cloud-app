@@ -1,0 +1,86 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import './tailwind.css';
+
+:host {
+  display: block;
+  height: -webkit-fill-available;
+  width: -webkit-fill-available;
+  box-sizing: border-box;
+  background-color: rgb(211, 211, 223);
+}
+
+.btn-success {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+
+.btn-failure {
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.btn-settings {
+  background-color: #4CAF50; /* Green color */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-settings i {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+.btn-close {
+  background-color: grey;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.btn-add {
+  background-color: #FF9800; /* Orange color */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.btn-add mat-icon {
+  margin-right: 5px; /* Space between icon and text */
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dialog-header h1 {
+  margin: 0;
+  flex-grow: 1;
+  font-size: 1.5rem;
+  text-align: center;
+}
