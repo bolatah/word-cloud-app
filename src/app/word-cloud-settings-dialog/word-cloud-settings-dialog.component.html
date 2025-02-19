@@ -23,11 +23,17 @@
         <mat-option value="Courier New">Courier New</mat-option>
         <mat-option value="Darumadrop One">Darumadrop One</mat-option>
       </mat-select>
-      
+
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Color Scheme</mat-label>
+      <mat-label>Select Background Color</mat-label>
+      <input matInput [(ngModel)]="backgroundColor" [ngxMatColorPicker]="picker" name="backgroundColor" type="color" />
+      <ngx-mat-color-picker #picker></ngx-mat-color-picker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Select Color Scheme</mat-label>
       <mat-select [(ngModel)]="colorScheme" name="colorScheme">
         <mat-option value="single-color">Single Color</mat-option>
         <mat-option value="random">Random Colors</mat-option>
@@ -38,10 +44,10 @@
         <mat-option value="dark">Dark Theme</mat-option>
       </mat-select>
     </mat-form-field>
-    
+
     @if(colorScheme=== 'single-color'){
     <mat-form-field>
-      <mat-label>Select Color</mat-label>
+      <mat-label>Select Text Color</mat-label>
       <input matInput [(ngModel)]="singleColor" [ngxMatColorPicker]="picker" name="singleColor" type="color" />
       <ngx-mat-color-picker #picker></ngx-mat-color-picker>
     </mat-form-field>
@@ -55,7 +61,8 @@
   <button mat-button class="btn-success" color="primary" (click)="onSave()">
     <mat-icon>
       save
-    </mat-icon></button>
+    </mat-icon>
+  </button>
 
   <button mat-button class="btn-close" (click)="onClose()">
     <mat-icon>

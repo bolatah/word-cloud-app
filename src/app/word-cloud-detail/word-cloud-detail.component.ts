@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { WordCloud } from "../word-cloud.model";
 import { Store } from "@ngrx/store";
 import {
@@ -64,6 +59,7 @@ export class WordCloudDetailComponent implements OnInit {
     fontType: "Arial",
     colorScheme: "single-color",
     singleColor: "#0d0d0d",
+    backgroundColor: "#FFFFFF",
   });
   private wordCloud!: WordCloud;
   private destroy$ = new Subject<void>();
@@ -193,21 +189,27 @@ export class WordCloudDetailComponent implements OnInit {
       console.error("SVG element not found.");
       return;
     }
-
     const allElements = svgElement.querySelectorAll("*");
     allElements.forEach((el) => {
       const computedStyle = window.getComputedStyle(el);
-      ["color", "fill", "stroke", "font-size", "font-family"].forEach(
-        (prop) => {
-          const value = computedStyle.getPropertyValue(prop);
-          if (value) {
-            el.setAttribute(
-              "style",
-              `${el.getAttribute("style") || ""}${prop}:${value};`
-            );
-          }
+      [
+        "color",
+        "fill",
+        "stroke",
+        "font-size",
+        "font-family",
+        "margin",
+        "width",
+        "height",
+      ].forEach((prop) => {
+        const value = computedStyle.getPropertyValue(prop);
+        if (value) {
+          el.setAttribute(
+            "style",
+            `${el.getAttribute("style") || ""}${prop}:${value};`
+          );
         }
-      );
+      });
     });
 
     const svgRect = svgElement.getBoundingClientRect();
@@ -219,7 +221,6 @@ export class WordCloudDetailComponent implements OnInit {
     svgElement.setAttribute("width", `${svgWidth}px`);
     svgElement.setAttribute("height", `${svgHeight}px`);
     svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svgElement);
     const svgBase64 =
@@ -229,13 +230,13 @@ export class WordCloudDetailComponent implements OnInit {
     const ctx = canvas.getContext("2d")!;
     canvas.width = svgWidth;
     canvas.height = svgHeight;
-
     const img = new Image();
     img.onload = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0);
       const base64Image = canvas.toDataURL("image/png");
       this.wordCloudService.setWallpaperFromWordCloud(base64Image);
+    
     };
 
     img.onerror = (error) => {

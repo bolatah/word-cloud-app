@@ -27,6 +27,7 @@ export interface Settings {
   fontType: string;
   colorScheme: string;
   singleColor: string;
+  backgroundColor: string;
 }
 @Component({
   selector: 'app-word-cloud-settings-dialog',
@@ -52,6 +53,7 @@ export class WordCloudSettingsDialogComponent {
   fontType: string;
   colorScheme: string;
   singleColor?: string ;
+  backgroundColor: string;
 
   constructor(
     public dialogRef: MatDialogRef<WordCloudSettingsDialogComponent>,
@@ -60,6 +62,7 @@ export class WordCloudSettingsDialogComponent {
     this.fontSize = data?.fontSize ;
     this.fontType = data?.fontType ;
     this.colorScheme = data?.colorScheme ; 
+    this.backgroundColor= data?.backgroundColor
   }
   onSave(): void {
     this.dialogRef.close({
@@ -67,6 +70,7 @@ export class WordCloudSettingsDialogComponent {
       fontType: this.fontType,
       colorScheme: this.colorScheme,
       singleColor: this.colorScheme === 'single-color' ? this.singleColor: undefined,
+      backgroundColor: this.backgroundColor
     });
   }
 

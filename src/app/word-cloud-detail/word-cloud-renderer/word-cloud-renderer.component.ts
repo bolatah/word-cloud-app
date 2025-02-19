@@ -68,7 +68,7 @@ export class WordCloudRendererComponent implements OnChanges {
     if (!this.settings || !this.words) {
       return;
     }
-    const { fontSize, fontType, colorScheme, singleColor } = this.settings;
+    const { fontSize, fontType, backgroundColor, colorScheme, singleColor } = this.settings;
     let layout = cloud()
       .size([svgWidth, svgHeight])
       .spiral("archimedean")
@@ -76,7 +76,8 @@ export class WordCloudRendererComponent implements OnChanges {
       .padding(5)
       .rotate(() => 0)
       .font(fontType)
-      .fontSize(fontSize);
+      .fontSize(fontSize)
+
     layout.start();
 
     const self = this;
@@ -117,9 +118,12 @@ export class WordCloudRendererComponent implements OnChanges {
       .html("")
       .append("svg")
       .attr("viewBox", `0 0 ${svgWidth} ${svgHeight}`)
-      .style("overflow", "hidden");
-
-    this.words.forEach((word) => {
+      .style("background-color", backgroundColor)
+      .style("border-radius", "10px")
+     // .style("overflow", "hidden")
+      .style("margin", "10px")
+   
+    this.words.forEach((word) => {  
       const { x, y } = WordCloudRendererComponent.generateUniqueCoordinates(
         this.words,
         svgWidth,

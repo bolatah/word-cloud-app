@@ -163,7 +163,7 @@ ipcMain.handle("set-wallpaper", async (event, base64Image) => {
   fs.writeFileSync(wallpaperPath, base64Data, "base64");
 
   exec(
-    `gsettings set org.gnome.desktop.background picture-uri file://${wallpaperPath}`,
+    `gsettings set org.gnome.desktop.background picture-options "scaled" && gsettings set org.gnome.desktop.background picture-uri "file://${wallpaperPath}"`,
     (err) => {
       if (err) {
         console.error("Failed to set wallpaper:", err);
