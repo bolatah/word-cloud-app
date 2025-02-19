@@ -4,7 +4,7 @@
   </button>
 </div>
 <div class="word-cloud-container">
-  @for ( wordCloud of (wordClouds$ | async); track wordCloud) {
+  @for ( wordCloud of (wordClouds$ | async); track wordCloud.id) {
   <app-word-cloud-card [wordCloud]="wordCloud">
   </app-word-cloud-card>
   }

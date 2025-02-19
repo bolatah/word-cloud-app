@@ -143,7 +143,8 @@ export class WordAddingDialogComponent implements OnInit, AfterViewInit {
           take(1),
         )
         .subscribe((wordCloud) => {
-          const newWord = this.newWordControl.value?.trim();
+          let newWord = this.newWordControl.value?.trim();
+        newWord = newWord.replace(/[^\w\s]/g, "");
           const updatedWords = [
             ...(wordCloud.words ?? []),
             newWord,
@@ -168,24 +169,35 @@ export class WordAddingDialogComponent implements OnInit, AfterViewInit {
   addText(): void {
     if (this.newTextControl.valid && !this._duplicateTextError$.getValue()) {
       this.wordCloud$.pipe(take(1)).subscribe((wordCloud) => {
-        const newText = this.newTextControl.value?.trim() as string;
-        const newWordsArray = newText?.split(" ").map((word) => word.trim());
-        const updatedWords = [...(wordCloud.words ?? []), ...newWordsArray];
-        this.store.dispatch(
-          updateWordCloud({
-            wordCloud: {
-              id: wordCloud.id,
-              name: wordCloud.name || "",
-              category: wordCloud.category || "",
-              words: updatedWords,
-            },
-          })
-        );
+        let newText = this.newTextControl.value?.trim() as string;
+  
+        // Remove punctuation and split words
+        const newWordsArray = newText
+          .replace(/[^\w\s]/g, "") // Remove punctuation
+          .split(" ")
+          .map((word) => word.trim())
+          .filter((word) => word.length > 0); // Remove empty words
+  
+        if (newWordsArray.length > 0) {
+          const updatedWords = [...(wordCloud.words ?? []), ...newWordsArray];
+  
+          this.store.dispatch(
+            updateWordCloud({
+              wordCloud: {
+                id: wordCloud.id,
+                name: wordCloud.name || "",
+                category: wordCloud.category || "",
+                words: updatedWords,
+              },
+            })
+          );
+        }
         this.newTextControl.reset();
         this.dialogRef.close();
       });
     }
   }
+  
 
   private delayedRequiredValidator(
     control: AbstractControl

@@ -2,18 +2,19 @@
   @if(wordCloud$ | async){
   <div class="header">
     <h1>{{ (wordCloud$ | async)?.name }}</h1>
-
   </div>
   }
-  <div class="content">
-    <div #wordCloudContainer class="word-cloud-container"></div>
+  <div #wordCloudParentContainer class="content" >
+    <app-word-cloud-renderer  [words]="words" [settings]="settings"   (wordUpdated)="updateWord($event.oldText, $event.newText)"
+    (wordDeleted)="deleteWord($event)">
+    </app-word-cloud-renderer>
   </div>
 
   <div class="actions">
-    <button class="btn-add" (click)="openAddDialog()" title="Add Word">
+    <button class="btn-add" (click)="openWordAddingDialog()" title="Add Word">
       <mat-icon>add</mat-icon>
     </button>
-    <button class="btn-success" (click)="setAsWallpaper(wordCloudContainer)" title="Set Wallpaper">
+    <button class="btn-success" (click)="setAsWallpaper(wordCloudParentContainer)" title="Set Wallpaper">
       <mat-icon>wallpaper</mat-icon>
     </button>
     <button class="btn-settings" (click)="openSettingsDialog()" title="Settings">

@@ -21,7 +21,9 @@
         <mat-option value="Verdana">Verdana</mat-option>
         <mat-option value="Georgia">Georgia</mat-option>
         <mat-option value="Courier New">Courier New</mat-option>
+        <mat-option value="Darumadrop One">Darumadrop One</mat-option>
       </mat-select>
+      
     </mat-form-field>
 
     <mat-form-field>
@@ -41,7 +43,6 @@
     <mat-form-field>
       <mat-label>Select Color</mat-label>
       <input matInput [(ngModel)]="singleColor" [ngxMatColorPicker]="picker" name="singleColor" type="color" />
-     <!--  <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>-->     
       <ngx-mat-color-picker #picker></ngx-mat-color-picker>
     </mat-form-field>
     }
