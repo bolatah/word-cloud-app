@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/word-cloud-app",
+            "outputPath": "electron/dist/word-cloud-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -25,15 +25,16 @@
               }
             ],
             "styles": ["src/styles.css", "src/tailwind.css"],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["d3-cloud"]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1MB",
+                  "maximumError": "2MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -66,7 +67,6 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
         }
-      
       }
     }
   },

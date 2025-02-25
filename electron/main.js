@@ -25,12 +25,12 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    webPreferences: {
+     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
       contextIsolation: true,
       enableRemoteModule: true,
-    },
+    }, 
   });
 
   const isDev = process.env.NODE_ENV === "development";
@@ -74,6 +74,13 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
+  }
+});
+
+app.on("before-quit", () => {
+  if (db) {
+    db.close();
+    console.log("Database connection closed.");
   }
 });
 
@@ -162,27 +169,49 @@ ipcMain.handle("set-wallpaper", async (event, base64Image) => {
   const base64Data = base64Image.replace(/^data:image\/png;base64,/, "");
   fs.writeFileSync(wallpaperPath, base64Data, "base64");
 
-  exec(
-    `gsettings set org.gnome.desktop.background picture-options "scaled" && gsettings set org.gnome.desktop.background picture-uri "file://${wallpaperPath}"`,
-    (err) => {
-      if (err) {
-        console.error("Failed to set wallpaper:", err);
-      } else {
-        console.log("Wallpaper set successfully!");
-      }
-    }
-  );
+   // Detect OS and desktop environment
+   const platform = process.platform;
 
+  let setWallpaperCommand = "";
+
+  if (platform === "linux") {
+    const desktopEnv = (process.env.XDG_MENU_PREFIX || "").toLowerCase();
+    if (desktopEnv.includes("gnome")) {
+      setWallpaperCommand = `gsettings set org.gnome.desktop.background picture-options "scaled" && gsettings set org.gnome.desktop.background picture-uri "file://${wallpaperPath}"`;
+    } else if (desktopEnv.includes("kde")) {
+      setWallpaperCommand = `qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript 'var a = desktops(); for (i in a) a[i].wallpaperPlugin = "org.kde.image"; a[i].currentConfigGroup = ["Wallpaper", "org.kde.image", "General"]; a[i].writeConfig("Image", "file://${wallpaperPath}")'`;
+    } else if (desktopEnv.includes("xfce")) {
+      setWallpaperCommand = `xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/image-path -s ${wallpaperPath}`;
+    } else {
+      console.error("Unsupported Linux desktop environment");
+      return;
+    }
+  } else if (platform === "win32") {
+    setWallpaperCommand = `powershell -Command "(New-Object -ComObject WScript.Shell).RegWrite('HKCU\\Control Panel\\Desktop\\Wallpaper', '${wallpaperPath}', 'REG_SZ'); RUNDLL32.EXE user32.dll,UpdatePerUserSystemParameters"`;
+  } else {
+    console.error("Unsupported OS");
+    return;
+  }
+
+  exec(setWallpaperCommand, (err) => {
+    if (err) {
+      console.error("Failed to set wallpaper:", err);
+    } else {
+      console.log("Wallpaper set successfully!");
+    }
+  });
+
+  // Keep only the latest 5 wallpapers
   const files = fs.readdirSync(wallpaperDir)
     .map(file => ({
       name: file,
       time: fs.statSync(path.join(wallpaperDir, file)).mtime.getTime()
     }))
-    .sort((a, b) => b.time - a.time); 
+    .sort((a, b) => b.time - a.time);
+
   if (files.length > 5) {
     files.slice(5).forEach(file => {
       fs.unlinkSync(path.join(wallpaperDir, file.name));
     });
   }
 });
-
