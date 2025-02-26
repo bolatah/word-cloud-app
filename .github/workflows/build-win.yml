@@ -1,4 +1,4 @@
-name: Build Windows Installer
+name: Build Multi-Platform Installer
 
 on:
   workflow_dispatch:
@@ -10,8 +10,19 @@ on:
       - main
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest  # Default to Linux for testing, will add matrix for cross-platform build
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            node_version: '18'
+          - os: windows-latest
+            node_version: '18'
+          - os: macos-latest
+            node_version: '18'
 
     steps:
       - name: Checkout repository
@@ -20,9 +31,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4 
         with:
-          node-version: '18'
-          # cache: 'npm'
-
+          node-version: ${{ matrix.node_version }}
+        
       - name: Install dependencies
         run: npm install --legacy-peer-deps
         
@@ -34,14 +44,92 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      # Build for the respective OS
       - name: Build Windows Installer
+        if: matrix.os == 'windows-latest'
         run: npm run build:win
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      - name: Build macOS Installer
+        if: matrix.os == 'macos-latest'
+        run: npm run build:macos
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Build Linux Installer
+        if: matrix.os == 'ubuntu-latest'
+        run: npm run build:linux
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      # Upload Artifacts based on OS
       - name: Upload Windows Build Artifact
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4  
         with:
           name: windows-installer
           path: dist/*.exe
           compression-level: 0  
+
+      - name: Upload macOS Build Artifact
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4  
+        with:
+          name: macos-installer
+          path: dist/*.dmg
+          compression-level: 0
+
+      - name: Upload Linux Build Artifact
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4  
+        with:
+          name: linux-installer
+          path: dist/*.AppImage
+          compression-level: 0
+
+      # Create GitHub Release (with artifacts)
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: "Release notes for the new build"
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      # Upload Release Assets
+      - name: Upload Release Asset (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/*.exe
+          asset_name: WordloudApp-1.0.0.exe
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Upload Release Asset (macOS)
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/*.dmg
+          asset_name: WordloudApp-1.0.0.dmg
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Upload Release Asset (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/*.AppImage
+          asset_name: WordloudApp-1.0.0.AppImage
+          asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
