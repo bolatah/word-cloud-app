@@ -85,12 +85,12 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: ${{ env.TAG }}
-          elease_name: Release ${{ env.TAG }}
+          release_name: Release ${{ env.TAG }}
           body: "Release notes for version ${{ env.TAG }}"
           draft: false
           prerelease: false
           env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
 
       - name: Upload Release Asset (Windows)
