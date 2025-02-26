@@ -25,7 +25,10 @@ jobs:
 
       - name: Install dependencies
         run: npm install --legacy-peer-deps
-
+        
+      - name: Set up GitHub Token
+        run: echo "GH_TOKEN=${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
+      
       - name: Build Windows Installer
         run: npm run build:win
 
