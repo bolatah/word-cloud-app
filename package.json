@@ -11,8 +11,7 @@
     "appId": "com.yourapp.wordcloud",
     "publish": [
       {
-        "provider": "github",
-        "token": "${GH_TOKEN}"
+        "provider": "github"
       }
     ],
     "extraResources": [
