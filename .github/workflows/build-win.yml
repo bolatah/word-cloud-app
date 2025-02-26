@@ -89,7 +89,7 @@ jobs:
           body: "Release notes for version ${{ env.TAG }}"
           draft: false
           prerelease: false
-          env:
+        env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
 
