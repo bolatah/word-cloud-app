@@ -28,9 +28,16 @@ jobs:
         
       - name: Set up GitHub Token
         run: echo "GH_TOKEN=${{ secrets.GH_TOKEN }}" >> $GITHUB_ENV
-      
+
+      - name: Debug GH_TOKEN
+        run: echo "GH_TOKEN is set"
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
       - name: Build Windows Installer
         run: npm run build:win
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Upload Windows Build Artifact
         uses: actions/upload-artifact@v4  
