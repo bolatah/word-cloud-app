@@ -25,7 +25,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4 
-
+        with:
+          fetch-depth: 0
+          
       - name: Set up Wine
         run: |
           sudo dpkg --add-architecture i386
