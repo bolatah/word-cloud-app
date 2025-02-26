@@ -76,19 +76,21 @@ jobs:
           name: linux-installer
           path: dist/*.AppImage
           compression-level: 0
-
-      # Create GitHub Release (with artifacts)
+      
+      - name: Get latest tag
+        id: get_tag
+        run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+        
       - name: Create GitHub Release
         uses: actions/create-release@v1
-        id: create_release 
         with:
-          tag_name: v1.0.0
-          release_name: Release ${{ github.ref_name }}
-          body: "Release notes for the new build"
+          tag_name: ${{ env.TAG }}
+          elease_name: Release ${{ env.TAG }}
+          body: "Release notes for version ${{ env.TAG }}"
           draft: false
           prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Upload Release Asset (Windows)
