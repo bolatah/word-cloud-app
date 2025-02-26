@@ -37,12 +37,6 @@
         "nsis"
       ],
       "icon": "build/icon.ico"
-    },
-    "mac": {
-      "target": [
-        "dmg"
-      ],
-      "icon": "build/icon.icns"
     }
   },
   "scripts": {
@@ -50,7 +44,6 @@
     "start": "ng serve",
     "rebuild": "electron-rebuild -f -w better-sqlit3",
     "build": "ng build",
-    "build:macos": "electron-builder --macos",
     "build:linux": "electron-builder --linux",
     "build:win": "electron-builder --win",
     "watch": "ng build --watch --configuration development",
