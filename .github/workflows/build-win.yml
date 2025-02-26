@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Default to Linux for testing, will add matrix for cross-platform build
+    runs-on: ubuntu-latest 
 
     strategy:
       matrix:
@@ -25,6 +25,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4 
+
+      - name: Set up Wine
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y wine64 wine32
 
       - name: Setup Node.js
         uses: actions/setup-node@v4 
