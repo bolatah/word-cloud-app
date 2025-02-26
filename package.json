@@ -23,7 +23,7 @@
     "asarUnpack": [
       "lib/**"
     ],
-    "productName": "WordloudApp",
+    "productName": "WordCloudApp",
     "linux": {
       "target": [
         "AppImage",

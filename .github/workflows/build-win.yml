@@ -103,8 +103,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/win-unpacked/*.exe
-          asset_name: WordloudApp-1.0.0.exe
+          asset_path: dist/*.exe
+          asset_name: WordCloudApp-1.0.0.exe
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -114,8 +114,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/linux-unpacked/*.AppImage
-          asset_name: WordloudApp-1.0.0.AppImage
+          asset_path: dist/*.AppImage
+          asset_name: WordCloudApp-1.0.0.AppImage
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
