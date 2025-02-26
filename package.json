@@ -26,7 +26,7 @@
     "productName": "WordloudApp",
     "linux": {
       "target": [
-        "AppImage"
+        "AppImage", "deb"
       ],
       "icon": "build/icon.png",
       "category": "Utility",
