@@ -82,7 +82,7 @@ jobs:
         uses: actions/create-release@v1
         id: create_release 
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ github.sha }}
           release_name: Release ${{ github.ref_name }}
           body: "Release notes for the new build"
           draft: false
