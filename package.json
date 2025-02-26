@@ -26,10 +26,9 @@
     "productName": "WordloudApp",
     "linux": {
       "target": [
-        "AppImage",
-        "deb"
+        "AppImage"
       ],
-      "icon" : "build/icon.png",
+      "icon": "build/icon.png",
       "category": "Utility",
       "maintainer": "Ahmet Bolat bolatah@outlook.com"
     },
@@ -51,6 +50,8 @@
     "start": "ng serve",
     "rebuild": "electron-rebuild -f -w better-sqlit3",
     "build": "ng build",
+    "build:macos": "electron-builder --macos",
+    "build:linux": "electron-builder --linux",
     "build:win": "electron-builder --win",
     "watch": "ng build --watch --configuration development",
     "electron": "ng serve --port 4200 & wait-on http://localhost:4200 && NODE_ENV=development electron .",
