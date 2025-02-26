@@ -5,7 +5,7 @@
     "email": "bolatah@outlook.com"
   },
   "name": "word-cloud-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "electron/main.js",
   "build": {
     "appId": "com.yourapp.wordcloud",
@@ -26,7 +26,8 @@
     "productName": "WordloudApp",
     "linux": {
       "target": [
-        "AppImage", "deb"
+        "AppImage",
+        "deb"
       ],
       "icon": "build/icon.png",
       "category": "Utility",
