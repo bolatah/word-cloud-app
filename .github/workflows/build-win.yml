@@ -87,9 +87,9 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ env.TAG }}
-          release_name: Release ${{ env.TAG }}
-          body: "Release notes for version ${{ env.TAG }}"
+          tag_name: ${{env.TAG}}
+          release_name: Release ${{env.TAG}}
+          body: "Release notes for version ${{env.TAG}}"
           draft: false
           prerelease: false
         env:
@@ -103,8 +103,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/WordCloudApp\ Setup\ 1.0.5.exe
-          asset_name: WordCloudApp-1.0.0.exe
+          asset_path: dist/*.exe
+          asset_name: WordloudApp-${{env.TAG}}.exe
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -115,7 +115,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: dist/*.AppImage
-          asset_name: WordCloudApp-1.0.0.AppImage
+          asset_name: WordloudApp-${{env.TAG}}.AppImage
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
