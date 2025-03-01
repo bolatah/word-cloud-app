@@ -10,13 +10,19 @@ jobs:
       - name: Get Latest Release Tag
         id: get_latest_tag
         run: |
-          $tag = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest" | Select-Object -ExpandProperty tag_name
-          echo "LATEST_TAG=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest" -Headers @{ Authorization = "token ${{ secrets.GITHUB_TOKEN }}" }
+          echo "LATEST_TAG=$($release.tag_name)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+        shell: pwsh
+
+      - name: Debug Latest Tag
+        run: echo "Latest tag is ${{ env.LATEST_TAG }}"
         shell: pwsh
 
       - name: Download Executable
         run: |
-          Invoke-WebRequest -Uri "https://github.com/${{ github.repository }}/releases/latest/download/WordloudApp-${{ env.LATEST_TAG }}.exe" -OutFile "WordloudApp.exe"
+          $url = "https://github.com/${{ github.repository }}/releases/download/${{ env.LATEST_TAG }}/WordloudApp-${{ env.LATEST_TAG }}.exe"
+          echo "Downloading from: $url"
+          Invoke-WebRequest -Uri $url -OutFile "WordloudApp.exe"
         shell: pwsh
 
       - name: Verify File Exists
