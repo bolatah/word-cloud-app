@@ -88,8 +88,8 @@ jobs:
         id: create_release_windows
         uses: actions/create-release@v1
         with:
-          tag_name: ${{env.TAG}}-windows
-          release_name: Release-${{env.TAG}}-Windows
+          tag_name: ${{env.TAG}}
+          release_name: ${{env.TAG}}-windows
           body: "Release notes for version ${{env.TAG}} for Windows"
           draft: false
           prerelease: false
@@ -117,8 +117,8 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.TAG }}-linux # Dynamic tag for Linux release
-          release_name: Release-${{ env.TAG }}-Linux
+          tag_name: v${{ env.TAG }} # Dynamic tag for Linux release
+          release_name: ${{ env.TAG }}-linux
           body: Release notes for version v${{ env.TAG }} for Linux
           draft: false
           prerelease: false
