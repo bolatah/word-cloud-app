@@ -29,7 +29,6 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Wine
-        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
