@@ -11,8 +11,6 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
@@ -21,18 +19,13 @@ jobs:
             node_version: "18"
           - os: windows-latest
             node_version: "18"
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Set up Wine
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install -y wine64 wine32
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -50,7 +43,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # Set tag name correctly
       - name: Get latest tag
         id: get_tag
         run: |
