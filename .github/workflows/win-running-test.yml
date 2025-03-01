@@ -1,22 +1,30 @@
 name: Test Executable
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   test-windows:
     runs-on: windows-latest
     steps:
+      - name: Get Latest Release Tag
+        id: get_latest_tag
+        run: |
+          $tag = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/releases/latest" | Select-Object -ExpandProperty tag_name
+          echo "LATEST_TAG=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8
+        shell: pwsh
+
       - name: Download Executable
         run: |
-          Invoke-WebRequest -Uri "https://github.com/${{ github.repository }}/releases/latest/download/WordloudApp-${{ github.ref_name }}.exe" -OutFile "WordloudApp.exe"
+          Invoke-WebRequest -Uri "https://github.com/${{ github.repository }}/releases/latest/download/WordloudApp-${{ env.LATEST_TAG }}.exe" -OutFile "WordloudApp.exe"
+        shell: pwsh
 
       - name: Verify File Exists
         run: |
           if (!(Test-Path "WordloudApp.exe")) { throw "Executable not found!" }
+        shell: pwsh
 
       - name: Run Executable
         run: |
           Start-Process -FilePath ".\WordloudApp.exe" -NoNewWindow -Wait
-
- 
+        shell: pwsh
