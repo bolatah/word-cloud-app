@@ -1,0 +1,22 @@
+name: Test Executable
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Download Executable
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/${{ github.repository }}/releases/latest/download/WordloudApp-${{ github.ref_name }}.exe" -OutFile "WordloudApp.exe"
+
+      - name: Verify File Exists
+        run: |
+          if (!(Test-Path "WordloudApp.exe")) { throw "Executable not found!" }
+
+      - name: Run Executable
+        run: |
+          Start-Process -FilePath ".\WordloudApp.exe" -NoNewWindow -Wait
+
+ 
