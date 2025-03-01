@@ -5,7 +5,7 @@
     "email": "bolatah@outlook.com"
   },
   "name": "word-cloud-app",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "electron/main.js",
   "build": {
     "appId": "com.yourapp.wordcloud",
