@@ -29,6 +29,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Wine
+        if: matrix.os == 'ubuntu-latest'
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
@@ -50,6 +51,24 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      # Set tag name correctly
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          TAG=$(git tag --sort=-v:refname | head -n 1)
+          if [ -z "$TAG" ]; then
+            TAG="v1.0.0"
+          fi
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+      - name: Set tag name for OS
+        run: |
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            echo "OS_TAG=${{ env.TAG }}-windows" >> $GITHUB_ENV
+          else
+            echo "OS_TAG=${{ env.TAG }}-linux" >> $GITHUB_ENV
+          fi
+
       - name: Build Windows Installer
         if: matrix.os == 'windows-latest'
         run: npm run build:win
@@ -62,7 +81,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      # Upload Artifacts based on OS
       - name: Upload Windows Build Artifact
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
@@ -79,27 +97,23 @@ jobs:
           path: dist/*.AppImage
           compression-level: 0
 
-      - name: Get latest tag
-        id: get_tag
-        run: echo "TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: List files in dist directory
+        run: |
+          echo "EXE_FILE=$(ls dist/*.exe | head -n 1)" >> $GITHUB_ENV
+          echo "APPIMAGE_FILE=$(ls dist/*.AppImage | head -n 1)" >> $GITHUB_ENV
 
       - name: Create Release for Windows
         if: matrix.os == 'windows-latest'
         id: create_release_windows
         uses: actions/create-release@v1
         with:
-          tag_name: ${{env.TAG}}
-          release_name: ${{env.TAG}}-windows
-          body: "Release notes for version ${{env.TAG}} for Windows"
+          tag_name: ${{ env.OS_TAG }}
+          release_name: Release ${{ env.OS_TAG }}
+          body: "Release notes for ${{ env.OS_TAG }} (Windows)"
           draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: List files in dist directory
-        run: |
-          echo "EXE_FILE=$(ls dist/*.exe | head -n 1)" >> $GITHUB_ENV
-          echo "APPIMAGE_FILE=$(ls dist/*.AppImage | head -n 1)" >> $GITHUB_ENV
 
       - name: Upload Release Asset (Windows)
         if: matrix.os == 'windows-latest'
@@ -107,7 +121,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release_windows.outputs.upload_url }}
           asset_path: ${{ env.EXE_FILE }}
-          asset_name: WordloudApp-${{env.TAG}}.exe
+          asset_name: WordCloudApp-${{ env.OS_TAG }}.exe
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -117,9 +131,9 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ env.TAG }} 
-          release_name: ${{ env.TAG }}-linux
-          body: Release notes for version v${{ env.TAG }} for Linux
+          tag_name: ${{ env.OS_TAG }}
+          release_name: Release ${{ env.OS_TAG }}
+          body: "Release notes for ${{ env.OS_TAG }} (Linux)"
           draft: false
           prerelease: false
         env:
@@ -131,7 +145,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release_linux.outputs.upload_url }}
           asset_path: ${{ env.APPIMAGE_FILE }}
-          asset_name: WordloudApp-${{env.TAG}}.AppImage
+          asset_name: WordCloudApp-${{ env.OS_TAG }}.AppImage
           asset_content_type: application/octet-stream
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
