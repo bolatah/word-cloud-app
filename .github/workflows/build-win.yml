@@ -117,7 +117,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/create-release@v1
         with:
-          tag_name: v${{ env.TAG }} # Dynamic tag for Linux release
+          tag_name: ${{ env.TAG }} 
           release_name: ${{ env.TAG }}-linux
           body: Release notes for version v${{ env.TAG }} for Linux
           draft: false
